@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: store-service-order
+  redis:
+    database: 0
+    host: "${REDIS_HOST:redis-order}"
+    port: "${REDIS_PORT:6379}"
+  datasource:
+    url: "jdbc:mysql://${DB_ADDRESS:order-db}/${DB_DATABASE:order}"
+    username: "${DB_USER:order}"
+    password: "${DB_PASSWORD:password}"
+  jpa:
+    generate-ddl: true
+    hibernate:
+      use-new-id-generator-mappings: false
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+server:
+  port: 80

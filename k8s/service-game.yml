@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-game
+  namespace: store
+  labels:
+    app: service-game
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: service-game
+  template:
+    metadata:
+      labels:
+        app: service-game
+    spec:
+      containers:
+        - name: service-game
+          image: store-service-game:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              port: 80
+              path: /actuator/health/readiness
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          livenessProbe:
+            httpGet:
+              port: 80
+              path: /actuator/health/liveness
+            initialDelaySeconds: 3
+            periodSeconds: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-game
+  labels:
+    app: service-game
+spec:
+  ports:
+    - protocol: "TCP"
+      port: 80
+  selector:
+    app: service-game
+  type: ClusterIP

@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: permissions
+  namespace: store
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "pods", "services", "endpoints", "secrets"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: default-permissions
+  namespace: store
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: store
+roleRef:
+  kind: Role
+  name: permissions
+  apiGroup: rbac.authorization.k8s.io

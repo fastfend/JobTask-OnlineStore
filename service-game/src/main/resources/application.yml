@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: service-game
+  datasource:
+    url: "jdbc:mysql://${DB_ADDRESS:game-db}/${DB_DATABASE:game}"
+    username: "${DB_USER:game}"
+    password: "${DB_PASSWORD:password}"
+  jpa:
+    generate-ddl: true
+    hibernate:
+      use-new-id-generator-mappings: false
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+  data:
+    mongodb:
+      host: "${MONGO_ADDRESS:game-mongo}"
+      port: "${MONGO_PORT:27017}"
+      database: "${MONGO_DATABASE:game}"
+      username: "${MONGO_USERNAME:game}"
+      password: "${MONGO_PASSWORD:password}"
+      authentication-database: admin
+      uuid-representation: standard
+server:
+  port: 80

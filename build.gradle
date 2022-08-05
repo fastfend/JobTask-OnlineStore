@@ -1,0 +1,43 @@
+plugins {
+    id "io.spring.dependency-management" version "1.0.12.RELEASE"
+    id 'org.springframework.boot' version '2.7.2'
+}
+
+subprojects {
+    group = 'com.cdprojekt.store'
+    version = '1.0.0'
+
+    ext {
+        lombokVersion = '1.18.24'
+        springCloudVersion = "2021.0.3"
+        springBootVersion = "2.7.2"
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: "org.springframework.boot"
+
+    repositories {
+        mavenCentral()
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+}

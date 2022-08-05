@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "microservices.game",
+      "type": "java.lang.String",
+      "description": "Description for microservices.game."
+  }
+] }

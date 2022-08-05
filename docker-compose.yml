@@ -1,0 +1,91 @@
+version: '3'
+services:
+  gateway:
+    container_name: gateway
+    build: ./gateway
+    image: store-gateway:latest
+    ports:
+      - "10001:5005"
+      - "8080:80"
+    environment:
+      JAVA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+      PROFILE: "docker"
+
+  redis-order:
+    image: redis:6.2-alpine
+    restart: always
+    command: redis-server
+
+  db-order:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root-password
+      MYSQL_PASSWORD: password
+      MYSQL_USER: order
+      MYSQL_DATABASE: order
+
+  service-order:
+    container_name: service-order
+    build: ./service-order
+    image: store-service-order:latest
+    ports:
+      - "10002:5005"
+      - "11000:80"
+    environment:
+      JAVA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+      PROFILE: "docker"
+      DB_ADDRESS: db-order
+      DB_PASSWORD: password
+      DB_USER: order
+      DB_DATABASE: order
+      REDIS_HOST: redis-order
+    depends_on:
+      - gateway
+      - redis-order
+      - db-order
+    links:
+      - gateway
+      - redis-order
+      - db-order
+
+  db-game:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root-password
+      MYSQL_PASSWORD: password
+      MYSQL_USER: game
+      MYSQL_DATABASE: game
+
+  mongo-game:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: game
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: game
+
+  service-game:
+    container_name: service-game
+    build: ./service-game
+    image: store-service-game:latest
+    ports:
+      - "10003:5005"
+      - "12000:80"
+    environment:
+      JAVA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+      PROFILE: "docker"
+      DB_ADDRESS: db-game
+      DB_PASSWORD: password
+      DB_USER: game
+      DB_DATABASE: game
+      MONGO_ADDRESS: mongo-game
+      MONGO_DATABASE: game
+      MONGO_USERNAME: game
+      MONGO_PASSWORD: password
+    depends_on:
+      - gateway
+      - mongo-game
+      - db-game
+    links:
+      - gateway
+      - mongo-game
+      - db-game

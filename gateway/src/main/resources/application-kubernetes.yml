@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    #    kubernetes:
+    #      loadbalancer:
+    #        mode: service
+    gateway:
+      #      discovery:
+      #        locator:
+      #          enabled: true
+      #          lower-case-service-id: true
+      routes:
+        - id: service-cart
+          uri: lb://service-cart
+          predicates:
+            - Path=/cart/**
+        - id: service-order
+          uri: lb://service-order
+          predicates:
+            - Path=/order/**
+        - id: service-game
+          uri: lb://service-game
+          predicates:
+            - Path=/game/**

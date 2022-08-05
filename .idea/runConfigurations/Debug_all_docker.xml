@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Debug all docker" type="CompoundRunConfigurationType">
+    <toRun name="Debug Game Service" type="Remote" />
+    <toRun name="Debug Order Service" type="Remote" />
+    <toRun name="Debug Proxy" type="Remote" />
+    <method v="2" />
+  </configuration>
+</component>
